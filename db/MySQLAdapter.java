@@ -5,14 +5,27 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MySQLAdapter implements IAdapter {
+    private String url;
+    private String user;
+    private String password;
+
     @Override
-    public Connection getConnection(String url, String user, String pass) throws SQLException {
-        try {
-            // Carga del driver de MySQL (Connector/J)
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("Driver MySQL no encontrado en el classpath", e);
+    public void connect(String host, int port, String dbName, String user, String password) {
+        // Estructura de URL para MySQL/MariaDB
+        this.url = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
+        this.user = user;
+        this.password = password;
+    }
+
+    @Override
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    @Override
+    public void releaseConnection(Connection connection) throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
         }
-        return DriverManager.getConnection(url, user, pass);
     }
 }
