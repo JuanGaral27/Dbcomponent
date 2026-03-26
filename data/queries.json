@@ -1,0 +1,8 @@
+{
+  "get_productos": "SELECT id, nombre, precio, stock FROM productos ORDER BY nombre ASC",
+  "insertar_producto": "INSERT INTO productos (nombre, precio, stock) VALUES (?, ?, ?)",
+  "actualizar_stock": "UPDATE productos SET stock = stock + ? WHERE id = ?",
+  "eliminar_producto": "DELETE FROM productos WHERE id = ?",
+  "insert_log": "INSERT INTO logs (descripcion, fecha) VALUES (?, CURRENT_TIMESTAMP)",
+  "buscar_por_categoria": "SELECT * FROM productos WHERE categoria = ? AND estado = 'activo'"
+}

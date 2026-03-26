@@ -19,7 +19,7 @@ public class PostgresAdapter implements IAdapter {
 
     @Override
     public Connection getConnection() throws SQLException {
-        // Retorna una conexión activa del driver [cite: 10]
+        // Retorna una conexión activa del driver
         return DriverManager.getConnection(url, user, password);
     }
 

@@ -5,7 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class Transaction {
+// Añadimos implements AutoCloseable para que el try-with-resources funcione
+public class Transaction implements AutoCloseable {
     private final Connection connection;
     private final Properties queries;
 
@@ -28,16 +29,33 @@ public class Transaction {
     }
 
     public void commit() throws SQLException {
-        connection.commit();
-        connection.setAutoCommit(true);
+        if (connection != null) {
+            connection.commit();
+            connection.setAutoCommit(true);
+        }
     }
 
     public void rollback() {
         try {
-            connection.rollback();
-            connection.setAutoCommit(true);
+            if (connection != null) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Este es el método que pide AutoCloseable
+    @Override
+    public void close() throws SQLException {
+        if (connection != null) {
+            // Es buena práctica asegurarse de que el autoCommit vuelva a true
+            // antes de cerrar o devolver la conexión al pool
+            if (!connection.getAutoCommit()) {
+                connection.setAutoCommit(true);
+            }
+            connection.close();
         }
     }
 }

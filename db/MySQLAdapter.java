@@ -11,7 +11,6 @@ public class MySQLAdapter implements IAdapter {
 
     @Override
     public void connect(String host, int port, String dbName, String user, String password) {
-        // Estructura de URL para MySQL/MariaDB
         this.url = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
         this.user = user;
         this.password = password;
